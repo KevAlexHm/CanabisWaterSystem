@@ -14,7 +14,7 @@ Transistor = SupplyEnergy.Transitor(2, True)
 
 
 def water_plant(transistor, seconds):
-    print(f"Function water plant called")
+    # print(f"Function water plant called")
 
     transistor.on()
     print("Plant is being watered!")
@@ -27,7 +27,7 @@ def water_plant(transistor, seconds):
 def main():
 
     time_checker = ST.SystemTime(ST.SystemTime.get_current_time())
-    print(f"Current system time, {time_checker.current_time}")
+    # print(f"Current system time, {time_checker.current_time}")
 
     try:
         current_dt = datetime.datetime.strptime(
@@ -53,7 +53,7 @@ def main():
 # WATERING_TIME = input("Write the time to water your plant")
 # How man times do you want to water your plant, per day, week, month?
 
-WATERING_TIME = input("Enter a time (HH:MM:SS AM/PM): ")
+WATERING_TIME = input("Enter a time in this format: (HH:MM:SS AM/PM): ")
 
 
 while True:
