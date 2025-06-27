@@ -27,9 +27,10 @@ def main():
 
     time_checker = ST.SystemTime(ST.SystemTime.get_current_time())
     print(f"Current system time, {time_checker.current_time}")
+    print(f"Your plants will be watered on: , {WATERING_TIME}!")
 
-    # if time_checker.current_time == WATERING_TIME:
-    water_plant(Transistor, SECONDS_TO_WATER)
+    if time_checker.current_time == WATERING_TIME:
+        water_plant(Transistor, SECONDS_TO_WATER)
     # time_checker.set_time_last_watered(ST.SystemTime.get_current_time())
     # print("\nPlant was last watered at {}".format(time_checker.time_last_watered))
     #   EmailNotifier.EmailNotifier.send_last_watered_email(
@@ -38,11 +39,10 @@ def main():
 
 # Getting data from the user
 # WATERING_TIME = input("Write the time to water your plant")
-# print(f"Your plants will be watered at Time, {WATERING_TIME}!")
 # How man times do you want to water your plant, per day, week, month?
 
-main()
-# while True:
-# schedule.run_pending()
-#   time.sleep(30)
-#  main()
+WATERING_TIME = input("Write the time to water your plant")
+while True:
+    schedule.run_pending()
+    time.sleep(30)
+    main()
