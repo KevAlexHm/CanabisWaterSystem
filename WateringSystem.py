@@ -1,10 +1,11 @@
-# import schedule
+import schedule
 import smtplib
 import time
 import ssl
 import SupplyEnergy
 import SystemTime as ST
 import EmailNotifier
+import datetime
 
 WATERING_TIME = "11:59:50 AM"
 SECONDS_TO_WATER = 10
@@ -27,10 +28,21 @@ def main():
 
     time_checker = ST.SystemTime(ST.SystemTime.get_current_time())
     print(f"Current system time, {time_checker.current_time}")
-    print(f"Your plants will be watered on: , {WATERING_TIME}!")
 
-    if time_checker.current_time == WATERING_TIME:
-        water_plant(Transistor, SECONDS_TO_WATER)
+    try:
+        current_dt = datetime.datetime.strptime(
+            time_checker.current_time, "%I:%M:%S %p"
+        )
+        user_dt = datetime.datetime.strptime(WATERING_TIME, "%I:%M:%S %p")
+
+        print(f"Comparing: , {current_dt} and {user_dt}!")
+
+        if current_dt == user_dt:
+            print(f"Entered to if condition : , {WATERING_TIME}!")
+            water_plant(Transistor, SECONDS_TO_WATER)
+    except:
+        print("Invalid time format. Please use HH:MM:SS AM/PM.")
+
     # time_checker.set_time_last_watered(ST.SystemTime.get_current_time())
     # print("\nPlant was last watered at {}".format(time_checker.time_last_watered))
     #   EmailNotifier.EmailNotifier.send_last_watered_email(
@@ -41,8 +53,10 @@ def main():
 # WATERING_TIME = input("Write the time to water your plant")
 # How man times do you want to water your plant, per day, week, month?
 
-WATERING_TIME = input("Write the time to water your plant")
+WATERING_TIME = input("Enter a time (HH:MM:SS AM/PM): ")
+
+
 while True:
     schedule.run_pending()
-    time.sleep(30)
+    time.sleep(1)
     main()
