@@ -19,7 +19,7 @@ Transistor = SupplyEnergy.Transitor(2, True)
 
 
 def water_plant(transistor, seconds):
-    # print(f"Function water plant called")
+    print(f"Function water plant called")
 
     transistor.on()
     print("Plant is being watered!")
@@ -27,6 +27,8 @@ def water_plant(transistor, seconds):
     print("Watering is finished!")
     transistor.off()
     print(f"Function water finished")
+
+    read_sensor_data()
 
 
 def main():
@@ -43,7 +45,7 @@ def main():
         print(f"Comparing: , {current_dt} and {user_dt}!")
 
         if current_dt == user_dt:
-            print(f"Entered to if condition : , {WATERING_TIME}!")
+            # print(f"Entered to if condition : , {WATERING_TIME}!")
             water_plant(Transistor, SECONDS_TO_WATER)
     except:
         print("Invalid time format. Please use HH:MM:SS AM/PM.")
@@ -55,29 +57,29 @@ def main():
 
 
 def read_sensor_data():
-    print(f"Function water plant called")
+    print(f"Function sensor data started")
     while True:
         try:
             # Read temperature (Celsius)
             temperature_c = dht_device.temperature
             # Read humidity (%)
             humidity = dht_device.humidity
-
             print(f"Temp: {temperature_c:.1f} C  Humidity: {humidity}%")
+            # To-Do: call e-mail function here
+
+            break
         except Exception as e:
             print("Reading from DHT11 failed:", e)
-        time.sleep(3)  # Wait 2 seconds before next reading
+        time.sleep(2)  # Wait 2 seconds before next reading
+    print(f"Function sensor data finished")
 
 
 # How man times do you want to water your plant, per day, week, month?
 
-# WATERING_TIME = input("Enter a time in this format: (HH:MM:SS AM/PM): ")
+WATERING_TIME = input("Enter a time in this format: (HH:MM:SS AM/PM): ")
 
-read_sensor_data()
 
-"""
 while True:
     schedule.run_pending()
     time.sleep(1)
     main()
-"""
