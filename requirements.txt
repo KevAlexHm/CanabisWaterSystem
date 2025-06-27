@@ -1,0 +1,4 @@
+adafruit_blinka==8.61.2
+adafruit_circuitpython_dht==4.0.9
+gpiozero==2.0.1
+schedule==1.2.2
