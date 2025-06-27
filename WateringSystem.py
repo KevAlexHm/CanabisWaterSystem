@@ -9,7 +9,7 @@ import EmailNotifier
 WATERING_TIME = "11:59:50 AM"
 SECONDS_TO_WATER = 10
 
-# Transistor = SupplyEnergy.Transitor(12, False)
+Transistor = SupplyEnergy.Transitor(2, False)
 
 
 def water_plant(transistor, seconds):
