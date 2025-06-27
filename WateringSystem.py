@@ -1,4 +1,4 @@
-import schedule
+# import schedule
 import smtplib
 import time
 import ssl
@@ -9,7 +9,7 @@ import EmailNotifier
 WATERING_TIME = "11:59:50 AM"
 SECONDS_TO_WATER = 10
 
-Transistor = SupplyEnergy.Transitor(12, False)
+# Transistor = SupplyEnergy.Transitor(12, False)
 
 
 def water_plant(transistor, seconds):
@@ -22,6 +22,8 @@ def water_plant(transistor, seconds):
 
 def main():
     time_checker = ST.SystemTime(ST.SystemTime.get_current_time())
+    print(f"Current system time, {time_checker.current_time}")
+    """"
     if time_checker.current_time == WATERING_TIME:
         water_plant(Transistor, SECONDS_TO_WATER)
         time_checker.set_time_last_watered(ST.SystemTime.get_current_time())
@@ -29,9 +31,16 @@ def main():
         EmailNotifier.EmailNotifier.send_last_watered_email(
             time_checker.time_last_watered
         )
+    """
 
 
-while True:
-    # schedule.run_pending()
-    time.sleep(30)
-    main()
+# Getting data from the user
+# WATERING_TIME = input("Write the time to water your plant")
+# print(f"Your plants will be watered at Time, {WATERING_TIME}!")
+# How man times do you want to water your plant, per day, week, month?
+
+main()
+# while True:
+# schedule.run_pending()
+#   time.sleep(30)
+#  main()
