@@ -13,25 +13,27 @@ Transistor = SupplyEnergy.Transitor(2, False)
 
 
 def water_plant(transistor, seconds):
+    print(f"Function water plant called")
+
     transistor.on()
     print("Plant is being watered!")
     time.sleep(seconds)
     print("Watering is finished!")
     transistor.off()
+    print(f"Function water finished")
 
 
 def main():
+
     time_checker = ST.SystemTime(ST.SystemTime.get_current_time())
     print(f"Current system time, {time_checker.current_time}")
-    """"
-    if time_checker.current_time == WATERING_TIME:
-        water_plant(Transistor, SECONDS_TO_WATER)
-        time_checker.set_time_last_watered(ST.SystemTime.get_current_time())
-        print("\nPlant was last watered at {}".format(time_checker.time_last_watered))
-        EmailNotifier.EmailNotifier.send_last_watered_email(
-            time_checker.time_last_watered
-        )
-    """
+
+    # if time_checker.current_time == WATERING_TIME:
+    water_plant(Transistor, SECONDS_TO_WATER)
+    # time_checker.set_time_last_watered(ST.SystemTime.get_current_time())
+    # print("\nPlant was last watered at {}".format(time_checker.time_last_watered))
+    #   EmailNotifier.EmailNotifier.send_last_watered_email(
+    #      time_checker.time_last_watered)
 
 
 # Getting data from the user
