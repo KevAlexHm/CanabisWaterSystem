@@ -6,9 +6,14 @@ import SupplyEnergy
 import SystemTime as ST
 import EmailNotifier
 import datetime
+import time
+import board
+import adafruit_dht
 
 WATERING_TIME = "11:59:50 AM"
 SECONDS_TO_WATER = 10
+dht_device = adafruit_dht.DHT11(board.D14)
+
 
 Transistor = SupplyEnergy.Transitor(2, True)
 
@@ -49,14 +54,30 @@ def main():
     #      time_checker.time_last_watered)
 
 
-# Getting data from the user
-# WATERING_TIME = input("Write the time to water your plant")
+def read_sensor_data():
+    print(f"Function water plant called")
+    while True:
+        try:
+            # Read temperature (Celsius)
+            temperature_c = dht_device.temperature
+            # Read humidity (%)
+            humidity = dht_device.humidity
+
+            print(f"Temp: {temperature_c:.1f} C  Humidity: {humidity}%")
+        except Exception as e:
+            print("Reading from DHT11 failed:", e)
+        time.sleep(3)  # Wait 2 seconds before next reading
+
+
 # How man times do you want to water your plant, per day, week, month?
 
-WATERING_TIME = input("Enter a time in this format: (HH:MM:SS AM/PM): ")
+# WATERING_TIME = input("Enter a time in this format: (HH:MM:SS AM/PM): ")
 
+read_sensor_data()
 
+"""
 while True:
     schedule.run_pending()
     time.sleep(1)
     main()
+"""
