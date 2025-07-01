@@ -12,10 +12,10 @@ import adafruit_dht
 
 WATERING_TIME = "11:59:50 AM"
 SECONDS_TO_WATER = 10
-dht_device = adafruit_dht.DHT11(board.D15)
+dht_device = adafruit_dht.DHT11(board.D14)
 
 
-Transistor = SupplyEnergy.Transitor(2, True)
+Transistor = SupplyEnergy.Transitor(15, True)
 
 
 def water_plant(transistor, seconds):
