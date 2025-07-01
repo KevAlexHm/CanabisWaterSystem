@@ -83,3 +83,9 @@ while True:
     schedule.run_pending()
     time.sleep(1)
     main()
+
+
+# https://realpython.com/pysimplegui-python/
+# https://realpython.com/python-gui-tkinter/#making-your-applications-interactive
+# https://www.pythonguis.com/tutorials/create-gui-tkinter/
+# https://medium.com/@fareedkhandev/modern-gui-using-tkinter-12da0b983e22
