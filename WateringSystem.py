@@ -32,7 +32,7 @@ def water_plant(transistor, seconds):
 
 
 def main():
-
+    # read Data from file
     time_checker = ST.SystemTime(ST.SystemTime.get_current_time())
     # print(f"Current system time, {time_checker.current_time}")
 
