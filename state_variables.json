@@ -1,1 +1,8 @@
-{"WATERING_TIME_STATE": "02:22"}
+{
+    "WATERING_TIME": "03:45 PM",
+    "FILL_QUANTITY": "33",
+    "EMAIL_ADDRESS": "kevin.alexdiaz98@gmail.com",
+    "ABSOLUTE_FILL_STAND": "20 L",
+    "RELATIVE_FILL_STAND": "100 %",
+    "RELATIVE_MOISTURE": ""
+}

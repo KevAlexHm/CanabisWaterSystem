@@ -7,15 +7,17 @@ import SystemTime as ST
 import EmailNotifier
 import datetime
 import time
-import board
-import adafruit_dht
+
+# import board
+# import adafruit_dht
+import json
 
 WATERING_TIME = "11:59:50 AM"
 SECONDS_TO_WATER = 10
-dht_device = adafruit_dht.DHT11(board.D15)
+# dht_device = adafruit_dht.DHT11(board.D15)
 
 
-Transistor = SupplyEnergy.Transitor(2, True)
+# Transistor = SupplyEnergy.Transitor(2, True)
 
 
 def water_plant(transistor, seconds):
@@ -35,7 +37,10 @@ def main():
     # read Data from file
     time_checker = ST.SystemTime(ST.SystemTime.get_current_time())
     # print(f"Current system time, {time_checker.current_time}")
+    watering_time = get_state_variables()
 
+    print(f"Current system time, {watering_time}")
+    """
     try:
         current_dt = datetime.datetime.strptime(
             time_checker.current_time, "%I:%M:%S %p"
@@ -49,13 +54,14 @@ def main():
             water_plant(Transistor, SECONDS_TO_WATER)
     except:
         print("Invalid time format. Please use HH:MM:SS AM/PM.")
-
+    """
     # time_checker.set_time_last_watered(ST.SystemTime.get_current_time())
     # print("\nPlant was last watered at {}".format(time_checker.time_last_watered))
     #   EmailNotifier.EmailNotifier.send_last_watered_email(
     #      time_checker.time_last_watered)
 
 
+"""
 def read_sensor_data():
     print(f"Function sensor data started")
     while True:
@@ -73,17 +79,30 @@ def read_sensor_data():
         time.sleep(2)  # Wait 2 seconds before next reading
     print(f"Function sensor data finished")
 
+"""
+
+
+def get_state_variables():
+    try:
+        with open("state_variables.json", "r") as f:
+            data = json.load(f)
+            return data.get("WATERING_TIME_STATE", "")
+    except Exception as e:
+        print(f"[System] Failed to read watering time: {e}")
+        return ""
+
 
 # How man times do you want to water your plant, per day, week, month?
 
-WATERING_TIME = input("Enter a time in this format: (HH:MM:SS AM/PM): ")
+# WATERING_TIME = input("Enter a time in this format: (HH:MM:SS AM/PM): ")
 
-
+main()
+"""
 while True:
     schedule.run_pending()
     time.sleep(1)
     main()
-
+"""
 
 # https://realpython.com/pysimplegui-python/
 # https://realpython.com/python-gui-tkinter/#making-your-applications-interactive

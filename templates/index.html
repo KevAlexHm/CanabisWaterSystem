@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="de">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,26 +12,36 @@
             background: #f5f5f5;
             color: #333;
         }
-        h1, h2 {
+
+        h1,
+        h2 {
             text-align: center;
         }
-        form, .info-block {
+
+        form,
+        .info-block {
             background: white;
             padding: 1rem;
             margin: 1rem auto;
             max-width: 400px;
             border-radius: 10px;
-            box-shadow: 0 0 8px rgba(0,0,0,0.1);
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
         }
-        label, input, button {
+
+        label,
+        input,
+        button {
             display: block;
             width: 100%;
             margin-bottom: 0.8rem;
             font-size: 1rem;
         }
-        input[type="time"], input[type="email"] {
+
+        input[type="time"],
+        input[type="email"] {
             padding: 0.5rem;
         }
+
         button {
             background-color: #007BFF;
             color: white;
@@ -39,29 +50,38 @@
             border-radius: 5px;
             cursor: pointer;
         }
+
         button:hover {
             background-color: #0056b3;
         }
+
         .info-block p {
             margin: 0.4rem 0;
         }
     </style>
 </head>
+
 <body>
     <h1>Raspberry-Pi Gießsystem</h1>
 
     <h2>Gießzeitpunkt festlegen</h2>
     <form action="/set_giesszeit" method="post">
-        <label for="giesszeit">Zeit wählen:</label>
-        <input type="time" id="giesszeit" name="giesszeit" required>
+        <label for="giesszeit">Zeit eingeben (z.B. 02:45 PM):</label>
+        <input type="text" id="giesszeit" name="giesszeit" placeholder="HH:MM AM/PM"
+            pattern="(0[1-9]|1[0-2]):[0-5][0-9]\s?(AM|PM)" title="Format: HH:MM AM/PM (z.B. 07:30 PM)" required>
         <button type="submit">Gießzeitpunkt Einstellen</button>
     </form>
-
-    <h2>E-Mails aktivieren</h2>
+    <h2>Gießmenge festlegen</h2>
+    <form action="/set_fill_quantity" method="post">
+        <label for="fill_quantity">Gießmenge in Mililiter (mL) eingeben (z.B. 5 mL):</label>
+        <input type="text" id="fill_quantity" name="fill_quantity" placeholder="XY mL">
+        <button type="submit">Gießmenge Einstellen</button>
+    </form>
+    <h2>E-Mail aktivieren</h2>
     <form action="/activate_email" method="post">
         <label for="email">E-Mail-Adresse:</label>
         <input type="email" id="email" name="email" required>
-        <button type="submit">E-Mails aktivieren</button>
+        <button type="submit">E-Mail aktivieren</button>
     </form>
 
     <h2>Informationen zum Gießsystem</h2>
@@ -78,4 +98,5 @@
         <button type="submit">Wasserbehälter befüllt</button>
     </form>
 </body>
+
 </html>

@@ -26,25 +26,58 @@ def index():
     )
 
 
+# Getting the watering time
 @app.route("/set_giesszeit", methods=["POST"])
 def set_giesszeit():
-    global giesszeit
-    giesszeit = request.form.get("giesszeit")
-
     new_time = request.form.get("giesszeit")
     if new_time:
+        try:
+            with open("state_variables.json", "r") as f:
+                data = json.load(f)
+        except FileNotFoundError:
+            data = {}
+
+        data["WATERING_TIME"] = new_time
+
         with open("state_variables.json", "w") as f:
-            json.dump({"WATERING_TIME_STATE": new_time}, f)
+            json.dump(data, f, indent=4)
         print(f"[Flask] New watering time set: {new_time}")
+    return redirect(url_for("index"))
+
+
+@app.route("/set_fill_quantity", methods=["POST"])
+def set_fill_quantity():
+    new_fill_quantity = request.form.get("fill_quantity")
+    if new_fill_quantity:
+        try:
+            with open("state_variables.json", "r") as f:
+                data = json.load(f)
+        except FileNotFoundError:
+            data = {}
+
+        data["FILL_QUANTITY"] = new_fill_quantity
+
+        with open("state_variables.json", "w") as f:
+            json.dump(data, f, indent=4)
+        print(f"[Flask] New fill quantity set: {new_fill_quantity}")
     return redirect(url_for("index"))
 
 
 @app.route("/activate_email", methods=["POST"])
 def activate_email():
-    global email_aktiviert, email_adresse
-    email_adresse = request.form.get("email")
-    email_aktiviert = True
-    print(f"E-Mail aktiviert: {email_adresse}")
+    new_email = request.form.get("email")
+    if new_email:
+        try:
+            with open("state_variables.json", "r") as f:
+                data = json.load(f)
+        except FileNotFoundError:
+            data = {}
+
+        data["EMAIL_ADDRESS"] = new_email
+
+        with open("state_variables.json", "w") as f:
+            json.dump(data, f, indent=4)
+        print(f"[Flask] New fill quantity set: {new_email}")
     return redirect(url_for("index"))
 
 
@@ -55,6 +88,20 @@ def reset_fueller():
     fuellstand_absolut = "2.0 L"
     fuellstand_relativ = "100 %"
     print("Füllstand zurückgesetzt")
+
+    new_absolute = "20 L"
+    new_relative = "100 %"
+    try:
+        with open("state_variables.json", "r") as f:
+            data = json.load(f)
+    except FileNotFoundError:
+        data = {}
+
+    data["ABSOLUTE_FILL_STAND"] = new_absolute
+    data["RELATIVE_FILL_STAND"] = new_relative
+
+    with open("state_variables.json", "w") as f:
+        json.dump(data, f, indent=4)
     return redirect(url_for("index"))
 
 
