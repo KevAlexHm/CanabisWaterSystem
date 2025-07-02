@@ -39,9 +39,13 @@ def set_giesszeit():
 
         data["WATERING_TIME"] = new_time
 
-        with open("state_variables.json", "w") as f:
-            json.dump(data, f, indent=4)
-        print(f"[Flask] New watering time set: {new_time}")
+        try:
+            with open("state_variables.json", "w") as f:
+                json.dump(data, f, indent=4)
+            print(f"[Flask] New watering time set: {new_time}")
+        except Exception as e:
+            print(f"[Flask] Error saving watering time to state_variables.json: {e}")
+
     return redirect(url_for("index"))
 
 
@@ -57,9 +61,13 @@ def set_fill_quantity():
 
         data["FILL_QUANTITY"] = new_fill_quantity
 
-        with open("state_variables.json", "w") as f:
-            json.dump(data, f, indent=4)
-        print(f"[Flask] New fill quantity set: {new_fill_quantity}")
+        try:
+            with open("state_variables.json", "w") as f:
+                json.dump(data, f, indent=4)
+            print(f"[Flask] New fill quantity set: {new_fill_quantity}")
+        except Exception as e:
+            print(f"[Flask] Error saving fill quantity to state_variables.json: {e}")
+
     return redirect(url_for("index"))
 
 
@@ -75,9 +83,13 @@ def activate_email():
 
         data["EMAIL_ADDRESS"] = new_email
 
-        with open("state_variables.json", "w") as f:
-            json.dump(data, f, indent=4)
-        print(f"[Flask] New fill quantity set: {new_email}")
+        try:
+            with open("state_variables.json", "w") as f:
+                json.dump(data, f, indent=4)
+            print(f"[Flask] New fill quantity set: {new_email}")
+        except Exception as e:
+            print(f"[Flask] Error saving e-mail to state_variables.json: {e}")
+
     return redirect(url_for("index"))
 
 
@@ -94,8 +106,13 @@ def reset_fueller():
     data["ABSOLUTE_FILL_STAND"] = new_absolute
     data["RELATIVE_FILL_STAND"] = new_relative
 
-    with open("state_variables.json", "w") as f:
-        json.dump(data, f, indent=4)
+    try:
+        with open("state_variables.json", "w") as f:
+            json.dump(data, f, indent=4)
+        print(f"[Flask] Fill quantity reseted")
+    except Exception as e:
+        print(f"[Flask] Error saving fill stand to state_variables.json: {e}")
+
     return redirect(url_for("index"))
 
 

@@ -8,29 +8,53 @@ import EmailNotifier
 import datetime
 import time
 
+# ----- Uncomment this for RPGiS
 # import board
 # import adafruit_dht
 import json
 
 WATERING_TIME = "11:59:50 AM"
+
+# ----- This needs to follow the equation set by Lion
 SECONDS_TO_WATER = 10
 FILL_QUANTITY = ""
 EMAIL_ADDRESS = ""
+# -----  Uncomment this for RPGiS
 # dht_device = adafruit_dht.DHT11(board.D15)
-
-
 # Transistor = SupplyEnergy.Transitor(2, True)
 
 
 def water_plant(transistor, seconds):
     print(f"Function water plant called")
 
+    """
+    Uncomment this for RPGiS
     transistor.on()
     print("Plant is being watered!")
     time.sleep(seconds)
     print("Watering is finished!")
     transistor.off()
     print(f"Function water finished")
+    """
+
+    # -----  This value needs to come from the calculation Giessdauer = ... (UPDATE)
+    new_absolute = "10 L"
+    new_relative = "50 %"
+    try:
+        with open("state_variables.json", "r") as f:
+            data = json.load(f)
+    except FileNotFoundError:
+        data = {}
+
+    data["ABSOLUTE_FILL_STAND"] = new_absolute
+    data["RELATIVE_FILL_STAND"] = new_relative
+
+    try:
+        with open("state_variables.json", "w") as f:
+            json.dump(data, f, indent=4)
+        print(f"[System] Fill quantities reseted")
+    except Exception as e:
+        print(f"[System] Error saving fill stand to state_variables.json: {e}")
 
     read_sensor_data()
 
@@ -43,9 +67,11 @@ def main():
     WATERING_TIME = state_values.get("WATERING_TIME", "")
     FILL_QUANTITY = state_values.get("FILL_QUANTITY", "")
     EMAIL_ADDRESS = state_values.get("EMAIL_ADDRESS", "")
-
+    ABSOLUTE_FILL_STAND = state_values.get("ABSOLUTE_FILL_STAND", "")
     print(f"Current, {EMAIL_ADDRESS}")
+
     """
+    ----- Uncomment this for RPGiS
     try:
         current_dt = datetime.datetime.strptime(
             time_checker.current_time, "%I:%M:%S %p"
@@ -54,6 +80,8 @@ def main():
 
         print(f"Comparing: , {current_dt} and {user_dt}!")
 
+        # (UPDATE) Add conditional if ABSOLUTE_FILL_STAND > FILL_QUANTITY: do watering, else send e-mail to user
+        
         if current_dt == user_dt:
             # print(f"Entered to if condition : , {WATERING_TIME}!")
             water_plant(Transistor, SECONDS_TO_WATER)
@@ -66,9 +94,11 @@ def main():
     #      time_checker.time_last_watered)
 
 
-"""
 def read_sensor_data():
     print(f"Function sensor data started")
+
+    """
+    ----- Uncomment this for RPGiS
     while True:
         try:
             # Read temperature (Celsius)
@@ -82,9 +112,25 @@ def read_sensor_data():
         except Exception as e:
             print("Reading from DHT11 failed:", e)
         time.sleep(2)  # Wait 2 seconds before next reading
-    print(f"Function sensor data finished")
+        """
+    # -----  This value needs to come from the sensor (UPDATE)
+    new_relative_moisture = "100 %"
+    try:
+        with open("state_variables.json", "r") as f:
+            data = json.load(f)
+    except FileNotFoundError:
+        data = {}
 
-"""
+    data["RELATIVE_MOISTURE"] = new_relative_moisture
+
+    try:
+        with open("state_variables.json", "w") as f:
+            json.dump(data, f, indent=4)
+        print(f"[System]  Moisture value updated")
+    except Exception as e:
+        print(f"[System] Error saving moisture to state_variables.json: {e}")
+
+    print(f"Function sensor data finished")
 
 
 def get_state_variables():
@@ -103,6 +149,7 @@ def get_state_variables():
 
 main()
 """
+----- Uncomment this for RPGiS
 while True:
     schedule.run_pending()
     time.sleep(1)
