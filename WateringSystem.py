@@ -14,6 +14,8 @@ import json
 
 WATERING_TIME = "11:59:50 AM"
 SECONDS_TO_WATER = 10
+FILL_QUANTITY = ""
+EMAIL_ADDRESS = ""
 # dht_device = adafruit_dht.DHT11(board.D15)
 
 
@@ -37,9 +39,12 @@ def main():
     # read Data from file
     time_checker = ST.SystemTime(ST.SystemTime.get_current_time())
     # print(f"Current system time, {time_checker.current_time}")
-    watering_time = get_state_variables()
+    state_values = get_state_variables()
+    WATERING_TIME = state_values.get("WATERING_TIME", "")
+    FILL_QUANTITY = state_values.get("FILL_QUANTITY", "")
+    EMAIL_ADDRESS = state_values.get("EMAIL_ADDRESS", "")
 
-    print(f"Current system time, {watering_time}")
+    print(f"Current, {EMAIL_ADDRESS}")
     """
     try:
         current_dt = datetime.datetime.strptime(
@@ -86,9 +91,9 @@ def get_state_variables():
     try:
         with open("state_variables.json", "r") as f:
             data = json.load(f)
-            return data.get("WATERING_TIME_STATE", "")
+            return data
     except Exception as e:
-        print(f"[System] Failed to read watering time: {e}")
+        print(f"[System] Failed to read state variables file: {e}")
         return ""
 
 

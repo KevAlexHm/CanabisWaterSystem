@@ -83,12 +83,6 @@ def activate_email():
 
 @app.route("/reset_fueller", methods=["POST"])
 def reset_fueller():
-    global fuellstand_absolut, fuellstand_relativ
-    # Beispielhafte Rücksetzung
-    fuellstand_absolut = "2.0 L"
-    fuellstand_relativ = "100 %"
-    print("Füllstand zurückgesetzt")
-
     new_absolute = "20 L"
     new_relative = "100 %"
     try:
