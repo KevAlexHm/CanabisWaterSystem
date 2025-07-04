@@ -4,39 +4,44 @@ import time
 import ssl
 import SupplyEnergy
 import SystemTime as ST
-import EmailNotifier
+import email_notifier
 import datetime
 import time
-
-# ----- Uncomment this for RPGiS
-import board
-import adafruit_dht
 import json
 
+# ----- Uncomment this for RPGiS
+"""
+import board
+import adafruit_dht
+"""
 WATERING_TIME = "11:59:50 AM"
 
 # ----- This needs to follow the equation set by Lion
 SECONDS_TO_WATER = 10
 FILL_QUANTITY = ""
-EMAIL_ADDRESS = ""
 # -----  Uncomment this for RPGiS
+"""
 dht_device = adafruit_dht.DHT11(board.D14)
 Transistor = SupplyEnergy.Transitor(15, True)
-
+"""
 last_watered_time = None
+email_notifier.notifier = email_notifier.EmailNotifier()
 
 
 def water_plant(transistor, seconds):
     print(f"[System]Function water plant called")
 
     # -----  Uncomment this for RPGiS
+    """
+    Add a try catch here, only if this works the writing in the JSON file
+    and the read sensor data + E-mail should work
     transistor.on()
     print("Plant is being watered!")
     time.sleep(seconds)
     print("Watering is finished!")
     transistor.off()
     print(f"Function water finished")
-
+    """
     # -----  This value needs to come from the calculation Giessdauer = ... (UPDATE)
     new_absolute = "10 L"
     new_relative = "50 %"
@@ -68,9 +73,14 @@ def main():
     state_values = get_state_variables()
     WATERING_TIME = state_values.get("WATERING_TIME", "")
     FILL_QUANTITY = state_values.get("FILL_QUANTITY", "")
-    # print(f"Current, {EMAIL_ADDRESS}")
+    EMAIL_ADDRESS = state_values.get("EMAIL_ADDRESS", "")
+    RELATIVE_MOISTURE = state_values.get("RELATIVE_MOISTURE", "")
+
+    print(f"Current, {WATERING_TIME}")
 
     # ----- Uncomment this for RPGiS
+    """
+    
     try:
         current_dt = datetime.datetime.strptime(
             time_checker.current_time, "%I:%M:%S %p"
@@ -96,6 +106,7 @@ def main():
             last_watered_time = None
     except Exception as e:
         print(f"[System] Invalid time format or error: {e}")
+    """
 
     # time_checker.set_time_last_watered(ST.SystemTime.get_current_time())
     # print("\nPlant was last watered at {}".format(time_checker.time_last_watered))
@@ -107,6 +118,7 @@ def read_sensor_data():
     print(f"[System]Function sensor data started")
 
     # ----- Uncomment this for RPGiS
+    """
     while True:
         try:
             # Read temperature (Celsius)
@@ -120,9 +132,10 @@ def read_sensor_data():
         except Exception as e:
             print("[System] Reading from DHT11 failed:", e)
         time.sleep(2)  # Wait 2 seconds before next reading
+    """
 
     # -----  This value needs to come from the sensor (UPDATE)
-    new_relative_moisture = str(humidity) + " %"
+    new_relative_moisture = str("humidity") + " %"
     try:
         with open("state_variables.json", "r") as f:
             data = json.load(f)
@@ -140,6 +153,18 @@ def read_sensor_data():
 
     print(f"[System] Function sensor data finished")
 
+    state_values = get_state_variables()
+    WATERING_TIME = state_values.get("WATERING_TIME", "")
+    FILL_QUANTITY = state_values.get("FILL_QUANTITY", "")
+    EMAIL_ADDRESS = state_values.get("EMAIL_ADDRESS", "")
+    RELATIVE_MOISTURE = state_values.get("RELATIVE_MOISTURE", "")
+
+    email_notifier.notifier.send_email(
+        receiver_email=EMAIL_ADDRESS,
+        subject="Warning: Low Water Level",
+        body=f"Deine Cannabis-Pflanze wurde erfolgreich gegossen. Der relative Luftfeuchtigkeit Wert ist: {RELATIVE_MOISTURE}",
+    )
+
 
 def get_state_variables():
     try:
@@ -153,14 +178,14 @@ def get_state_variables():
 
 # How man times do you want to water your plant, per day, week, month?
 
-# WATERING_TIME = input("Enter a time in this format: (HH:MM:SS AM/PM): ")
-
-
+main()
 # ----- Uncomment this for RPGiS
+"""
 while True:
     schedule.run_pending()
     time.sleep(5)
     main()
+"""
 
 
 # https://realpython.com/pysimplegui-python/
