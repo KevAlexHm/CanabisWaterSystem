@@ -59,7 +59,7 @@ def set_fill_quantity():
         except FileNotFoundError:
             data = {}
 
-        data["FILL_QUANTITY"] = new_fill_quantity
+        data["FILL_QUANTITY"] = int(new_fill_quantity)
 
         try:
             with open("state_variables.json", "w") as f:
@@ -95,8 +95,8 @@ def activate_email():
 
 @app.route("/reset_fueller", methods=["POST"])
 def reset_fueller():
-    new_absolute = "20000"
-    new_relative = "100 %"
+    new_absolute = 20000
+    new_relative = 100
     try:
         with open("state_variables.json", "r") as f:
             data = json.load(f)
