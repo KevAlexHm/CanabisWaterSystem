@@ -20,8 +20,8 @@ SECONDS_TO_WATER = 10
 FILL_QUANTITY = ""
 EMAIL_ADDRESS = ""
 # -----  Uncomment this for RPGiS
-dht_device = adafruit_dht.DHT11(board.D15)
-Transistor = SupplyEnergy.Transitor(2, True)
+dht_device = adafruit_dht.DHT11(board.D14)
+Transistor = SupplyEnergy.Transitor(15, True)
 
 last_watered_time = None
 
