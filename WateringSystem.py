@@ -66,8 +66,6 @@ def read_sensor_data():
             humidity = dht_device.humidity
             print(f"Temp: {temperature_c:.1f} C  Humidity: {humidity}%")
             # To-Do: call e-mail function here
-
-            break
         except Exception as e:
             print("Reading from DHT11 failed:", e)
         time.sleep(2)  # Wait 2 seconds before next reading
