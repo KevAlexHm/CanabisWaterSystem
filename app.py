@@ -29,12 +29,12 @@ def index():
 
     return render_template(
         "index.html",
-        giesszeit=giesszeit,
-        email=email_adresse if email_aktiviert else "Nicht aktiviert",
-        fuellstand_absolut=fuellstand_absolut,
-        fuellstand_relativ=fuellstand_relativ,
-        temperatur=temperatur,
-        luftfeuchtigkeit=luftfeuchtigkeit,
+        giesszeit=state.get("WATERING_TIME", "Nicht gesetzt"),
+        email=state.get("EMAIL_ADDRESS", "Nicht gesetzt"),
+        fuellstand_absolut=state.get("ABSOLUTE_FILL_STAND", "N/A"),
+        fuellstand_relativ=state.get("RELATIVE_FILL_STAND", "N/A"),
+        temperatur=state.get("TEMPERATURE", "N/A"),
+        luftfeuchtigkeit=state.get("HUMIDITY", "N/A"),
     )
 
 
