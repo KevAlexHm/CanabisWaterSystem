@@ -88,7 +88,7 @@ def main():
         current_time_str = current_dt.strftime("%I:%M %p")
         user_time_str = user_dt.strftime("%I:%M %p")
 
-        if ABSOLUTE_FILL_STAND > FILL_QUANTITY:
+        if int(ABSOLUTE_FILL_STAND) > int(FILL_QUANTITY):
             if current_time_str == user_time_str:
                 if last_watered_time != user_time_str:
                     print(
