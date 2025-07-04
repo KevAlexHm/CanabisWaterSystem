@@ -95,7 +95,6 @@ def main():
                     print(
                         f"[System]Watering time & system time are equal: , {WATERING_TIME}!"
                     )
-                    print(type(FILL_QUANTITY))
                     SECONDS_TO_WATER = (50 + 22.14) / 9.84
 
                     water_plant(

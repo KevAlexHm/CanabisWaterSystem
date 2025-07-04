@@ -13,8 +13,20 @@ temperatur = "22 °C"
 luftfeuchtigkeit = "60 %"
 
 
+def get_state_values():
+    try:
+        with open("state_variables.json", "r") as f:
+            return json.load(f)
+    except Exception as e:
+        print(f"[Flask] Failed to read JSON: {e}")
+        return {}
+
+
 @app.route("/", methods=["GET"])
 def index():
+
+    state = get_state_values()
+
     return render_template(
         "index.html",
         giesszeit=giesszeit,
