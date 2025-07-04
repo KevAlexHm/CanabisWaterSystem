@@ -26,7 +26,7 @@ last_watered_time = None
 email_notifier.notifier = email_notifier.EmailNotifier()
 
 
-def water_plant(transistor, seconds):
+def water_plant(transistor, seconds, absolute, relative, quantity):
     print(f"[System]Function water plant called")
 
     # -----  Uncomment this for RPGiS
@@ -40,8 +40,8 @@ def water_plant(transistor, seconds):
     print(f"Function water finished")
 
     # -----  This value needs to come from the calculation Giessdauer = ... (UPDATE)
-    new_absolute = "10 L"
-    new_relative = "50 %"
+    new_absolute = absolute - quantity
+    new_relative = new_absolute / 20000
     try:
         with open("state_variables.json", "r") as f:
             data = json.load(f)
@@ -70,10 +70,10 @@ def main():
     state_values = get_state_variables()
     WATERING_TIME = state_values.get("WATERING_TIME", "")
     FILL_QUANTITY = state_values.get("FILL_QUANTITY", "")
+    ABSOLUTE_FILL_STAND = state_values.get("ABSOLUTE_FILL_STAND", "")
+    RELATIVE_FILL_STAND = state_values.get("RELATIVE_FILL_STAND", "")
     EMAIL_ADDRESS = state_values.get("EMAIL_ADDRESS", "")
-    RELATIVE_MOISTURE = state_values.get("RELATIVE_MOISTURE", "")
-
-    print(f"Current, {WATERING_TIME}")
+    # print(f"Current, {WATERING_TIME}")
 
     # ----- Uncomment this for RPGiS
 
@@ -87,26 +87,34 @@ def main():
 
         current_time_str = current_dt.strftime("%I:%M %p")
         user_time_str = user_dt.strftime("%I:%M %p")
-        # (UPDATE) Add conditional if ABSOLUTE_FILL_STAND > FILL_QUANTITY: do watering, else send e-mail to user
 
-        if current_time_str == user_time_str:
-            if last_watered_time != user_time_str:
-                print(
-                    f"[System]Watering time & system time are equal: , {WATERING_TIME}!"
-                )
-                water_plant(Transistor, SECONDS_TO_WATER)
-                last_watered_time = user_time_str
+        if ABSOLUTE_FILL_STAND > FILL_QUANTITY:
+            if current_time_str == user_time_str:
+                if last_watered_time != user_time_str:
+                    print(
+                        f"[System]Watering time & system time are equal: , {WATERING_TIME}!"
+                    )
+                    SECONDS_TO_WATER = (FILL_QUANTITY + 22, 14) / 9, 84
+                    water_plant(
+                        Transistor,
+                        SECONDS_TO_WATER,
+                        ABSOLUTE_FILL_STAND,
+                        RELATIVE_FILL_STAND,
+                        FILL_QUANTITY,
+                    )
+                    last_watered_time = user_time_str
+                else:
+                    print(f"[System] Already watered at {user_time_str}. Skipping.")
             else:
-                print(f"[System] Already watered at {user_time_str}. Skipping.")
+                last_watered_time = None
         else:
-            last_watered_time = None
+            email_notifier.notifier.send_email(
+                receiver_email=EMAIL_ADDRESS,
+                subject="Deine Pflanze muss gepflegt werden",
+                body="Füllmenge vom Wasserbehälter reicht zum Gießen nicht aus, bitte füll die Behälter aus",
+            )
     except Exception as e:
         print(f"[System] Invalid time format or error: {e}")
-
-    # time_checker.set_time_last_watered(ST.SystemTime.get_current_time())
-    # print("\nPlant was last watered at {}".format(time_checker.time_last_watered))
-    #   EmailNotifier.EmailNotifier.send_last_watered_email(
-    #      time_checker.time_last_watered)
 
 
 def read_sensor_data():
@@ -122,7 +130,6 @@ def read_sensor_data():
             humidity = dht_device.humidity
             print(f"[Raspberry] Temp: {temperature_c:.1f} C  Humidity: {humidity}%")
             # To-Do: call e-mail function here
-
             break
         except Exception as e:
             print("[System] Reading from DHT11 failed:", e)

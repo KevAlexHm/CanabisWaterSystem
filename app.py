@@ -95,7 +95,7 @@ def activate_email():
 
 @app.route("/reset_fueller", methods=["POST"])
 def reset_fueller():
-    new_absolute = "20 L"
+    new_absolute = "20000"
     new_relative = "100 %"
     try:
         with open("state_variables.json", "r") as f:
