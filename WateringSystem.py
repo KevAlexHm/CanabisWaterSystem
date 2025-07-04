@@ -9,8 +9,8 @@ import datetime
 import time
 
 # ----- Uncomment this for RPGiS
-# import board
-# import adafruit_dht
+import board
+import adafruit_dht
 import json
 
 WATERING_TIME = "11:59:50 AM"
@@ -20,22 +20,22 @@ SECONDS_TO_WATER = 10
 FILL_QUANTITY = ""
 EMAIL_ADDRESS = ""
 # -----  Uncomment this for RPGiS
-# dht_device = adafruit_dht.DHT11(board.D15)
-# Transistor = SupplyEnergy.Transitor(2, True)
+dht_device = adafruit_dht.DHT11(board.D15)
+Transistor = SupplyEnergy.Transitor(2, True)
+
+last_watered_time = None
 
 
 def water_plant(transistor, seconds):
-    print(f"Function water plant called")
+    print(f"[System]Function water plant called")
 
-    """
-    Uncomment this for RPGiS
+    # -----  Uncomment this for RPGiS
     transistor.on()
     print("Plant is being watered!")
     time.sleep(seconds)
     print("Watering is finished!")
     transistor.off()
     print(f"Function water finished")
-    """
 
     # -----  This value needs to come from the calculation Giessdauer = ... (UPDATE)
     new_absolute = "10 L"
@@ -60,34 +60,43 @@ def water_plant(transistor, seconds):
 
 
 def main():
+    global last_watered_time
+
     # read Data from file
     time_checker = ST.SystemTime(ST.SystemTime.get_current_time())
     # print(f"Current system time, {time_checker.current_time}")
     state_values = get_state_variables()
     WATERING_TIME = state_values.get("WATERING_TIME", "")
     FILL_QUANTITY = state_values.get("FILL_QUANTITY", "")
-    EMAIL_ADDRESS = state_values.get("EMAIL_ADDRESS", "")
-    ABSOLUTE_FILL_STAND = state_values.get("ABSOLUTE_FILL_STAND", "")
-    print(f"Current, {EMAIL_ADDRESS}")
+    # print(f"Current, {EMAIL_ADDRESS}")
 
-    """
-    ----- Uncomment this for RPGiS
+    # ----- Uncomment this for RPGiS
     try:
         current_dt = datetime.datetime.strptime(
             time_checker.current_time, "%I:%M:%S %p"
         )
-        user_dt = datetime.datetime.strptime(WATERING_TIME, "%I:%M:%S %p")
+        user_dt = datetime.datetime.strptime(WATERING_TIME, "%I:%M %p")
 
-        print(f"Comparing: , {current_dt} and {user_dt}!")
+        print(f"[System]Comparing times: {current_dt} and {user_dt}!")
 
+        current_time_str = current_dt.strftime("%I:%M %p")
+        user_time_str = user_dt.strftime("%I:%M %p")
         # (UPDATE) Add conditional if ABSOLUTE_FILL_STAND > FILL_QUANTITY: do watering, else send e-mail to user
-        
-        if current_dt == user_dt:
-            # print(f"Entered to if condition : , {WATERING_TIME}!")
-            water_plant(Transistor, SECONDS_TO_WATER)
-    except:
-        print("Invalid time format. Please use HH:MM:SS AM/PM.")
-    """
+
+        if current_time_str == user_time_str:
+            if last_watered_time != user_time_str:
+                print(
+                    f"[System]Watering time & system time are equal: , {WATERING_TIME}!"
+                )
+                water_plant(Transistor, SECONDS_TO_WATER)
+                last_watered_time = user_time_str
+            else:
+                print(f"[System] Already watered at {user_time_str}. Skipping.")
+        else:
+            last_watered_time = None
+    except Exception as e:
+        print(f"[System] Invalid time format or error: {e}")
+
     # time_checker.set_time_last_watered(ST.SystemTime.get_current_time())
     # print("\nPlant was last watered at {}".format(time_checker.time_last_watered))
     #   EmailNotifier.EmailNotifier.send_last_watered_email(
@@ -95,26 +104,25 @@ def main():
 
 
 def read_sensor_data():
-    print(f"Function sensor data started")
+    print(f"[System]Function sensor data started")
 
-    """
-    ----- Uncomment this for RPGiS
+    # ----- Uncomment this for RPGiS
     while True:
         try:
             # Read temperature (Celsius)
             temperature_c = dht_device.temperature
             # Read humidity (%)
             humidity = dht_device.humidity
-            print(f"Temp: {temperature_c:.1f} C  Humidity: {humidity}%")
+            print(f"[Raspberry] Temp: {temperature_c:.1f} C  Humidity: {humidity}%")
             # To-Do: call e-mail function here
 
             break
         except Exception as e:
-            print("Reading from DHT11 failed:", e)
+            print("[System] Reading from DHT11 failed:", e)
         time.sleep(2)  # Wait 2 seconds before next reading
-        """
+
     # -----  This value needs to come from the sensor (UPDATE)
-    new_relative_moisture = "100 %"
+    new_relative_moisture = str(humidity) + " %"
     try:
         with open("state_variables.json", "r") as f:
             data = json.load(f)
@@ -130,7 +138,7 @@ def read_sensor_data():
     except Exception as e:
         print(f"[System] Error saving moisture to state_variables.json: {e}")
 
-    print(f"Function sensor data finished")
+    print(f"[System] Function sensor data finished")
 
 
 def get_state_variables():
@@ -147,14 +155,13 @@ def get_state_variables():
 
 # WATERING_TIME = input("Enter a time in this format: (HH:MM:SS AM/PM): ")
 
-main()
-"""
------ Uncomment this for RPGiS
+
+# ----- Uncomment this for RPGiS
 while True:
     schedule.run_pending()
-    time.sleep(1)
+    time.sleep(5)
     main()
-"""
+
 
 # https://realpython.com/pysimplegui-python/
 # https://realpython.com/python-gui-tkinter/#making-your-applications-interactive
