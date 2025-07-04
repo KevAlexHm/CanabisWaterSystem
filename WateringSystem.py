@@ -19,6 +19,7 @@ WATERING_TIME = "11:59:50 AM"
 SECONDS_TO_WATER = 10
 FILL_QUANTITY = ""
 # -----  Uncomment this for RPGiS
+
 dht_device = adafruit_dht.DHT11(board.D14)
 Transistor = SupplyEnergy.Transitor(15, True)
 
@@ -88,13 +89,15 @@ def main():
         current_time_str = current_dt.strftime("%I:%M %p")
         user_time_str = user_dt.strftime("%I:%M %p")
 
-        if int(ABSOLUTE_FILL_STAND) > int(FILL_QUANTITY):
+        if ABSOLUTE_FILL_STAND > FILL_QUANTITY:
             if current_time_str == user_time_str:
                 if last_watered_time != user_time_str:
                     print(
                         f"[System]Watering time & system time are equal: , {WATERING_TIME}!"
                     )
-                    SECONDS_TO_WATER = (FILL_QUANTITY + 22, 14) / 9, 84
+                    print(type(FILL_QUANTITY))
+                    SECONDS_TO_WATER = (50 + 22.14) / 9.84
+
                     water_plant(
                         Transistor,
                         SECONDS_TO_WATER,
@@ -102,6 +105,7 @@ def main():
                         RELATIVE_FILL_STAND,
                         FILL_QUANTITY,
                     )
+
                     last_watered_time = user_time_str
                 else:
                     print(f"[System] Already watered at {user_time_str}. Skipping.")
@@ -136,7 +140,7 @@ def read_sensor_data():
         time.sleep(2)  # Wait 2 seconds before next reading
 
     # -----  This value needs to come from the sensor (UPDATE)
-    new_relative_moisture = str({humidity}) + " %"
+    new_relative_moisture = str(humidity) + " %"
     try:
         with open("state_variables.json", "r") as f:
             data = json.load(f)
