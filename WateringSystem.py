@@ -13,10 +13,10 @@ import json
 import board
 import adafruit_dht
 
+# Not needed anymore
 WATERING_TIME = "11:59:50 AM"
-
-# ----- This needs to follow the equation set by Lion
-SECONDS_TO_WATER = 10
+# Not needed anymore
+# SECONDS_TO_WATER = 10
 FILL_QUANTITY = ""
 # -----  Uncomment this for RPGiS
 
