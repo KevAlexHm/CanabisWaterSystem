@@ -3,7 +3,8 @@ import json
 
 app = Flask(__name__)
 
-# Beispielhafte Zustände
+
+"""
 giesszeit = "07:00"
 email_aktiviert = False
 email_adresse = ""
@@ -11,7 +12,7 @@ fuellstand_absolut = "1.5 L"
 fuellstand_relativ = "75 %"
 giessmenge = "22 °C"
 luftfeuchtigkeit = "60 %"
-
+"""
 
 """
     Reads the current state from 'state_variables.json'.
