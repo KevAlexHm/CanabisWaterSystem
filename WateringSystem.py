@@ -34,15 +34,23 @@ last_watered_time = None
 def water_plant(transistor, seconds, absolute, relative, quantity):
     print(f"[System]Function water plant called")
 
-    # -----  Uncomment this for RPGiS
+    try:
+        # Attempt to activate pump
+        transistor.on()
+        print("[System] Plant is being watered!")
+        time.sleep(seconds)
+        print("[System] Watering is finished!")
+    except Exception as e:
+        print(f"[System] Error during watering, transistor could not be turned on: {e}")
+        return  # Exit function early if watering fails
 
-    # Add a try catch here, only if this works the writing in the JSON file and the read sensor data + E-mail should work
-    transistor.on()
-    print("Plant is being watered!")
-    time.sleep(seconds)
-    print("Watering is finished!")
-    transistor.off()
-    print(f"Function water finished")
+    finally:
+        # Ensure the pump is always turned off, even if an error occurred
+        try:
+            transistor.off()
+            print(f"[System] Transistor turned off safely")
+        except Exception as e:
+            print(f"[System] Error while turning off transistor: {e}")
 
     # Calculate new fill levels after watering
     new_absolute = absolute - quantity
@@ -146,16 +154,11 @@ def main():
 # Also sends an email to notify that watering was successful.
 def read_sensor_data():
     print(f"[System]Function sensor data started")
-
-    # ----- Uncomment this for RPGiS
-
     while True:
         try:
-
             # Read humidity from sensor
             humidity = dht_device.humidity
             print(f"[Raspberry] Humidity: {humidity}%")
-            # To-Do: call e-mail function here
             break
         except Exception as e:
             print("[System] Reading from DHT11 failed:", e)
