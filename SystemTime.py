@@ -1,8 +1,7 @@
 import datetime
 
 
-# Class responsible for checking the system time and checking when was the last time the plant
-# was watered
+# Class responsible for checking the system time and checking when was the last time the plant was watered
 class SystemTime:
 
     def __init__(self, current_time):
