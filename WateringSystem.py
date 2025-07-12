@@ -13,16 +13,11 @@ import json
 import board
 import adafruit_dht
 
-# Not needed anymore
-WATERING_TIME = "11:59:50 AM"
-# Not needed anymore
-# SECONDS_TO_WATER = 10
-FILL_QUANTITY = ""
 # -----  Uncomment this for RPGiS
 
 # ----- Hardware and state setup -----
 
-# Initialize DHT11 temperature and humidity sensor on GPIO pin D14
+# Initialize DHT11 humidity sensor on GPIO pin D14
 dht_device = adafruit_dht.DHT11(board.D14)
 # Initialize the transistor module on GPIO pin 15
 Transistor = SupplyEnergy.Transitor(15, True)
